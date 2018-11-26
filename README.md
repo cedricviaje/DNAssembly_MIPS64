@@ -1,7 +1,8 @@
 # DNAssembly (MIPS64 Assebly Language)
 ## (April 4, 2018)
 ```
-Determines the length of a DNA string, the frequency count of the symbol A, C, G, and T, and the GC-content of a given DNA string
+Determines the length of a DNA string, the frequency count of the symbol A, C, G, and T, 
+and the GC-content of a given DNA string
 ```
 ### Given
 ```
