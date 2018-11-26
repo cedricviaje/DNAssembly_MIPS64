@@ -1,0 +1,64 @@
+;Viaje, Cedric Lance A. S18A
+
+.data
+
+DNA: .asciiz "ACGTATAG"
+STRLEN: .byte 0
+FREQA: .byte 0
+FREQC: .byte 0
+FREQG: .byte 0
+FREQT: .byte 0
+GCC: .double 0
+;CLEAR .byte 0
+
+.code
+DADDIU R3, R3,  #0041 ; ASCII value of A
+DADDIU R4, R4, #0043 ; ASCII value of C
+DADDIU R5, R5, #0047 ; ASCII value of G
+DADDIU R6, R6, #0054 ; ASCII value of T
+
+mainLoop:
+LB R1, DNA(R2) ; load and iterate every character in input
+DADDIU R2, R2, #0001 ; increment
+
+BEQC R1, R3, incrementA ; branch if equals to A
+BEQC R1, R4, incrementC ; branch if equals to C
+BEQC R1, R5, incrementG ; branch if equals to G
+BEQC R1, R6, incrementT ; branch if equals to T
+BEQZC R1, getSTRLENandGCC
+BC mainLoop
+
+incrementA:
+DADDIU R7, R7, #0001 ; increment frequency of A
+BC mainLoop
+
+incrementC:
+DADDIU R8, R8, #0001 ; increment frequency of C
+BC mainLoop
+
+incrementG:
+DADDIU R9, R9, #0001 ; increment frequency of G
+BC mainLoop
+
+incrementT:
+DADDIU R10, R10, #0001 ; increment frequency of T
+BC mainLoop
+
+getSTRLENandGCC:
+DADDU R11, R8, R9	; store value of G and C (numerator)
+DADDU R12, R7, R10	; store value of A and T
+DADDU R13, R11, R12	; store value of A, C, G, and T (denominator)
+
+DMTC1 R11, F1 ; move value to FS
+DMTC1 R13, F2 ; move value to FS
+DIV.S F3, F1, F2 ; divide numerator and denominator
+
+;LB R0, DNA(R15) ; clear R0
+
+last:
+SD R13, STRLEN(R0) ; store string length
+SD R7, FREQA(R0) ; store frequency of A
+SD R8, FREQC(R0) ; store frequency of C
+SD R9, FREQG(R0) ; store frequency of G
+SD R10, FREQT(R0) ; store frequency of T
+S.S F3, GCC(R0) ; store GC-Content
